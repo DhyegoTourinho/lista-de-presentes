@@ -6,9 +6,11 @@ import App from "./App.tsx";
 import { Provider } from "./provider.tsx";
 import "@/styles/globals.css";
 
+// Use basename only in production
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={"/lista-de-presentes"}>
       <Provider>
         <App />
       </Provider>
