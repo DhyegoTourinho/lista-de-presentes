@@ -6,5 +6,5 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
-  base: command === 'build' ? '/lista-de-presentes/' : '/',
+  base: "/lista-de-presentes",
 }));

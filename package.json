@@ -1,14 +1,15 @@
 {
+  "homepage": "https://dhyegotourinho.github.io/lista-de-presentes",
   "name": "vite-template",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://dhyegotourinho.github.io/lista-de-presentes",
   "scripts": {
   "dev": "vite",
   "build": "vite build",
   "preview": "vite preview",
-  "deploy": "vite build && echo. > dist/.nojekyll && gh-pages -d dist"
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@heroui/button": "2.2.23",
