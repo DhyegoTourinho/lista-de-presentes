@@ -6,11 +6,18 @@ import App from "./App.tsx";
 import { Provider } from "./provider.tsx";
 import "@/styles/globals.css";
 
-// Use basename only in production
+// Determinar basename baseado no ambiente
+const getBasename = () => {
+  const baseUrl = import.meta.env.BASE_URL || "";
+  if (baseUrl.includes("dhyegotourinho") || window.location.href.includes("dhyegotourinho")) {
+    return "/lista-de-presentes";
+  }
+  return "/";
+};
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter basename={"/lista-de-presentes"}>
+    <BrowserRouter basename={getBasename()}>
       <Provider>
         <App />
       </Provider>
