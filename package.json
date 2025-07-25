@@ -8,7 +8,7 @@
   "dev": "vite",
   "build": "vite build",
   "preview": "vite preview",
-  "deploy": "vite build && gh-pages -d dist"
+  "deploy": "vite build && echo. > dist/.nojekyll && gh-pages -d dist"
   },
   "dependencies": {
     "@heroui/button": "2.2.23",
