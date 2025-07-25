@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
-  base: '/lista-de-presentes/', // <- Nome exato do repositório GitHub
-});
+  base: command === 'build' ? '/lista-de-presentes/' : '/',
+}));
