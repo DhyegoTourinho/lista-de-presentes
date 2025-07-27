@@ -7,4 +7,8 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig(({ command }) => ({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   base: command === 'build' ? '/lista-de-presentes/' : '/',
+  server: {
+    open: true,
+    port: 3000,
+  },
 }));
