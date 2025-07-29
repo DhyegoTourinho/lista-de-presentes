@@ -11,21 +11,41 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@heroui/navbar";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Avatar
+} from "@heroui/react";
 import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   TwitterIcon,
   GithubIcon,
   DiscordIcon,
-  HeartFilledIcon,
   SearchIcon,
 } from "@/components/icons";
 import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
+  const { currentUser, userProfile, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -57,7 +77,7 @@ export const Navbar = () => {
             href="/"
           >
             <Logo />
-            <p className="font-bold text-inherit">ACME</p>
+            <p className="font-bold text-inherit">Lista de Presentes</p>
           </Link>
         </NavbarBrand>
         <div className="hidden lg:flex gap-4 justify-start ml-2">
@@ -66,7 +86,7 @@ export const Navbar = () => {
               <Link
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-secondary data-[active=true]:font-medium",
                 )}
                 color="foreground"
                 href={item.href}
@@ -95,18 +115,55 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sponsor
-          </Button>
-        </NavbarItem>
+        
+        {/* Seção de Autenticação */}
+        {currentUser && userProfile ? (
+          <NavbarItem>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  as="button"
+                  className="transition-transform"
+                  name={userProfile.displayName}
+                  size="sm"
+                  src={userProfile.profileImage}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="profile" className="h-14 gap-2">
+                  <p className="font-semibold">Logado como</p>
+                  <p className="font-semibold">{userProfile.displayName}</p>
+                </DropdownItem>
+                <DropdownItem 
+                  key="admin" 
+                  onPress={() => navigate(`/admin/${userProfile.username}`)}
+                >
+                  Painel Admin
+                </DropdownItem>
+                <DropdownItem 
+                  key="public" 
+                  onPress={() => navigate(`/gift/${userProfile.username}`)}
+                >
+                  Ver Perfil Público
+                </DropdownItem>
+                <DropdownItem key="logout" color="danger" onPress={handleLogout}>
+                  Sair
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        ) : (
+          <NavbarItem>
+            <Button
+              as={Link}
+              color="secondary"
+              href="/login"
+              variant="flat"
+            >
+              Entrar
+            </Button>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -114,6 +171,49 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link>
         <ThemeSwitch />
+        {currentUser && userProfile ? (
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                as="button"
+                className="transition-transform"
+                name={userProfile.displayName}
+                size="sm"
+                src={userProfile.profileImage}
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold">Logado como</p>
+                <p className="font-semibold">{userProfile.displayName}</p>
+              </DropdownItem>
+              <DropdownItem 
+                key="admin" 
+                onPress={() => navigate(`/admin/${userProfile.username}`)}
+              >
+                Painel Admin
+              </DropdownItem>
+              <DropdownItem 
+                key="public" 
+                onPress={() => navigate(`/gift/${userProfile.username}`)}
+              >
+                Ver Perfil Público
+              </DropdownItem>
+              <DropdownItem key="logout" color="danger" onPress={handleLogout}>
+                Sair
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        ) : (
+          <Button
+            as={Link}
+            color="secondary"
+            href="/login"
+            size="sm"
+          >
+            Entrar
+          </Button>
+        )}
         <NavbarMenuToggle />
       </NavbarContent>
 
@@ -125,7 +225,7 @@ export const Navbar = () => {
               <Link
                 color={
                   index === 2
-                    ? "primary"
+                    ? "secondary"
                     : index === siteConfig.navMenuItems.length - 1
                       ? "danger"
                       : "foreground"
@@ -137,6 +237,28 @@ export const Navbar = () => {
               </Link>
             </NavbarMenuItem>
           ))}
+          {currentUser && userProfile && (
+            <>
+              <NavbarMenuItem>
+                <Link
+                  color="foreground"
+                  href={`/admin/${userProfile.username}`}
+                  size="lg"
+                >
+                  Painel Admin
+                </Link>
+              </NavbarMenuItem>
+              <NavbarMenuItem>
+                <Link
+                  color="danger"
+                  onPress={handleLogout}
+                  size="lg"
+                >
+                  Sair
+                </Link>
+              </NavbarMenuItem>
+            </>
+          )}
         </div>
       </NavbarMenu>
     </HeroUINavbar>

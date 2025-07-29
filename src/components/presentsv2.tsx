@@ -95,7 +95,7 @@ export default function App() {
         //           <p className="text-tiny text-white font-bold">{item.price}</p>
         //         </div>
         //       </div>
-        //       <Button radius="full" size="sm" color="primary">
+        //       <Button radius="full" size="sm" color="secondary">
         //         Ver
         //       </Button>
         //     </CardFooter>
@@ -153,7 +153,7 @@ export default function App() {
             <p className="text-black text-tiny">Available soon.</p>
             <p className="text-black text-tiny">Get notified.</p>
           </div>
-          <Button className="text-tiny" color="primary" radius="full" size="sm">
+          <Button className="text-tiny" color="secondary" radius="full" size="sm">
             Notify Me
           </Button>
         </CardFooter>

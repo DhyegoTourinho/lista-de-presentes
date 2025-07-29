@@ -9,7 +9,7 @@ export default function DefaultLayout({
   return (
     <div className="relative flex flex-col h-screen">
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        <div className="text-end">
+        <div className="flex items-center justify-end gap-4 mb-6">
           <Avatar />
           <ThemeSwitch />
         </div>
@@ -23,7 +23,7 @@ export default function DefaultLayout({
           title="heroui.com homepage"
         >
           <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
+          <p className="text-secondary">HeroUI</p>
         </Link>
       </footer>
     </div>
