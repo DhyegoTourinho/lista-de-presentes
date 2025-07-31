@@ -21,6 +21,7 @@ import { db } from "@/config/firebase";
 import { UserProfile, Gift } from "@/types";
 import DefaultLayout from "@/layouts/default";
 import { title } from "@/components/primitives";
+import { CometCard } from "@/components/ui/comet-card";
 
 export default function GiftPage() {
   const { username } = useParams<{ username: string }>();
@@ -92,8 +93,6 @@ export default function GiftPage() {
     );
   }
   // Verificações usando variáveis
-  const isUrlValida = !!username;
-  const isAcessoNegado = error === "Acesso negado";
   const isPaginaNaoEncontrada = error === "Página não encontrada";
   const isUsuarioNaoEncontrado = error === "Usuário não encontrado";
 
@@ -182,14 +181,18 @@ export default function GiftPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {gifts.map((gift) => (
+                  <CometCard rotateDepth = {17.5}
+                    translateDepth = {20}
+                    className = "max-w-[280px] mx-auto"
+                  >
                     <Card key={gift.id} className="max-w-[280px]">
                       <CardBody className="p-4">
                         {gift.imageUrl && (
                           <Image
-                            src={gift.imageUrl}
-                            alt={gift.name}
-                            className="w-full h-40 object-cover rounded-lg mb-3"
-                            fallbackSrc="/api/placeholder/280/160"
+                          src={gift.imageUrl}
+                          alt={gift.name}
+                          className="w-full h-40 object-cover rounded-lg mb-3"
+                          fallbackSrc="/api/placeholder/280/160"
                           />
                         )}
                         
@@ -217,11 +220,11 @@ export default function GiftPage() {
                           
                           {gift.link && !gift.isPurchased && (
                             <Button
-                              color="secondary"
-                              variant="flat"
-                              size="sm"
-                              className="w-full mt-3"
-                              onPress={() => handlePurchaseClick(gift)}
+                            color="secondary"
+                            variant="flat"
+                            size="sm"
+                            className="w-full mt-3"
+                            onPress={() => handlePurchaseClick(gift)}
                             >
                               Ver/Comprar
                             </Button>
@@ -235,6 +238,7 @@ export default function GiftPage() {
                         </div>
                       </CardBody>
                     </Card>
+                  </CometCard>
                   ))}
                 </div>
               )}
