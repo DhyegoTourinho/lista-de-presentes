@@ -12,10 +12,10 @@ export default function DefaultLayout({
     <div className="relative flex flex-col h-screen">
       <StarsBackground className="absolute inset-0 -z-20 w-full h-full" />
       <ShootingStars className="absolute inset-0 -z-10 w-full h-full" />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        <div className="flex items-center justify-end gap-4 mb-6">
-          <Avatar />
+      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-6">
+        <div className="flex items-center justify-end gap-4">
           <ThemeSwitch />
+          <Avatar />
         </div>
         {children}
       </main>

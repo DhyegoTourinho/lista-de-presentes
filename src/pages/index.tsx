@@ -11,25 +11,25 @@ export default function IndexPage() {
     {currentUser && userProfile ? (
       // Usuário logado - mostrar dashboard
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+        
         <div className="inline-block max-w-4xl text-center justify-center">
-          <span className={title()}>Sistema de&nbsp;</span>
-          <span className={title({ color: "violet" })}>{userProfile ? userProfile.displayName : "Dhyego"}&nbsp;</span>
+          <span className={title()}>{userProfile .displayName}'s&nbsp;</span>
+          <span className={title({ color: "violet" })}>GIFTLAB&nbsp;</span>
           <br />
-          <div className={subtitle({ class: "mt-4" })}>
-            Crie e gerencie sua própria lista de presentes personalizada
-          </div>
-        </div>
-        <div className="w-full max-w-4xl px-4 space-y-6">
-          <Card>
+        </div> 
+
+        <div className="bg-opacity-100 w-full max-w-4xl mt-4 px-4 space-y-6">
+          <Card
+          className="bg-opacity-50 border border-default-400"
+          >
             <CardHeader>
               <h2 className="text-2xl font-semibold">
                 Bem-vindo, 
-                <span className="text-secondary-600">&nbsp;{userProfile.displayName}&nbsp;</span>
-                !
+                <span className="text-secondary-500">&nbsp;{userProfile.displayName}&nbsp;</span>
               </h2>
             </CardHeader>
             <CardBody className="space-y-4">
-              <p className="text-default-600">
+              <p className="text-default-600 ">
                 Gerencie sua lista de presentes e compartilhe com seus amigos e familiares.
               </p>
               
@@ -39,9 +39,9 @@ export default function IndexPage() {
                   href={`/admin/${userProfile.username}`}
                   color="secondary"
                   size="lg"
-                  className="flex-1"
+                  className="bg-secondary-500/30 flex-1"
                 >
-                  Gerenciar Minha Lista
+                    Gerenciar Minha Lista
                 </Button>
                 
                 <Button
@@ -55,12 +55,12 @@ export default function IndexPage() {
                 </Button>
               </div>
 
-              <div className="mt-6 p-4 bg-default-50 rounded-lg">
+              <div className="mt-6 p-4 rounded-lg mt-16">
                 <p className="text-sm text-default-600">
                   <strong>Seu Link público:</strong>
                   <br />
                   <code className="text-secondary">
-                    {window.location.origin}/#/gift/{userProfile.username}
+                    {window.location.origin}/gift/{userProfile.username}
                   </code>
                 </p>
                 <p className="text-xs text-default-500 mt-2">
@@ -75,7 +75,7 @@ export default function IndexPage() {
       // Usuário não logado - mostrar landing page
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-4xl text-center justify-center">
-          <span className={title()}>Faça você também a sua&nbsp;</span>
+          <span className={title()}>Faça já a sua&nbsp;</span>
           <span className={title({ color: "violet" })}>Lista de Presentes&nbsp;</span>
           <br />
           <div className={subtitle({ class: "mt-4" })}>
@@ -83,8 +83,10 @@ export default function IndexPage() {
         </div>
         </div>
           <div className="w-full max-w-4xl px-4 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
+            <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card
+              className="bg-black-600/20 border border-default-400"
+              >
                 <CardHeader>
                   <h3 className="text-xl font-semibold">🎁 Crie sua Lista</h3>
                 </CardHeader>
@@ -95,7 +97,9 @@ export default function IndexPage() {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card
+              className="bg-black-600/20 border border-default-400"
+              >
                 <CardHeader>
                   <h3 className="text-xl font-semibold">🔗 Compartilhe</h3>
                 </CardHeader>
@@ -106,7 +110,9 @@ export default function IndexPage() {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card
+              className="bg-black-600/20 border border-default-400"
+              >
                 <CardHeader>
                   <h3 className="text-xl font-semibold">⚡ Fácil de Usar</h3>
                 </CardHeader>
@@ -117,7 +123,9 @@ export default function IndexPage() {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card
+              className="bg-black-600/20 border border-default-400"
+              >
                 <CardHeader>
                   <h3 className="text-xl font-semibold">🔒 Seguro</h3>
                 </CardHeader>
@@ -130,14 +138,14 @@ export default function IndexPage() {
             </div>
 
             <div className="text-center space-y-4">
-              <h3 className="text-2xl font-semibold">Pronto para começar?</h3>
+              <h3 className="text-2xl font-semibold">Vamos começar?</h3>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   as={Link}
                   href="/login"
                   color="secondary"
                   size="lg"
-                  className="px-8"
+                  className="bg-secondary-500/30 px-8"
                 >
                   Criar Conta Gratuita
                 </Button>
@@ -146,9 +154,9 @@ export default function IndexPage() {
                   href="/gift/demo"
                   variant="bordered"
                   size="lg"
-                  className="px-8"
+                  className="px-8 bg-black-500/30"
                 >
-                  Ver Exemplo
+                  Ver Listas
                 </Button>
               </div>
             </div>
