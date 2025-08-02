@@ -5,7 +5,9 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updateProfile
+  updateProfile,
+  AuthError,
+  AuthErrorCodes
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/config/firebase';
@@ -74,9 +76,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     if (!isFirebaseConfigured()) {
-      throw new Error('Firebase não está configurado');
+      throw new Error("Firebase não está configurado");
     }
-    await signInWithEmailAndPassword(auth, email, password);
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      // Tipar com mais segurança
+      const error = err as AuthError;
+      
+      // Códigos que indicam credenciais inválidas
+      const invalidCredentialCodes = new Set([
+        'auth/wrong-password', // senha incorreta (código antigo)
+        'auth/user-not-found', // usuário não encontrado
+        'auth/invalid-credential', // credencial inválida (novo código Firebase v9+)
+        'auth/invalid-login-credentials' // credenciais de login inválidas
+      ]);
+
+      if (invalidCredentialCodes.has(error.code)) {
+        // Mensagem genérica para não vazar qual dos dois está errado
+        throw new Error(
+          "Credenciais inválidas, por favor, verifique seus dados e tente novamente."
+        );
+      }
+      
+      // Para outros tipos de erro, relançar o erro original
+      throw error;
+    }
   };
 
   const register = async (email: string, password: string, username: string, displayName: string) => {

@@ -23,7 +23,8 @@ export default function LoginPage() {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    const newValue = value.replace(/ /g, "-");
+    setFormData(prev => ({ ...prev, [field]: newValue }));
     setError(""); // Limpar erro ao digitar
   };
 
@@ -148,6 +149,7 @@ export default function LoginPage() {
                 {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}
               </p>
               <Link
+                href="/admin/:username"
                 as="button"
                 type="button"
                 color="secondary"

@@ -5,7 +5,7 @@ import DefaultLayout from "@/layouts/default";
 
 export default function IndexPage() {
   const { currentUser, userProfile } = useAuth();
-
+  window.location.reload();
   return (
     <DefaultLayout>
     {currentUser && userProfile ? (
