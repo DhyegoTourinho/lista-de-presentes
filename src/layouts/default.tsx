@@ -9,7 +9,7 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="relative flex flex-col min-h-screen overflow-hidden">
       <StarsBackground className="absolute inset-0 -z-20 w-full h-full" />
       <ShootingStars className="absolute inset-0 -z-10 w-full h-full" />
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-6">

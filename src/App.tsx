@@ -5,6 +5,7 @@ import LoginPage from "@/pages/login";
 import AdminPage from "@/pages/admin";
 import GiftPage from "@/pages/gift";
 import DemoGiftPage from "@/pages/demo-gift";
+import PublicListsPage from "@/pages/public-lists";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     <Routes>
       <Route element={<IndexPage />} path="/" />
       <Route element={<LoginPage />} path="/login" />
+      <Route element={<PublicListsPage />} path="/listas" />
       <Route 
         element={
           <ProtectedRoute>

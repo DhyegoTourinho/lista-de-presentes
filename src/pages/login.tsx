@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Card, CardBody, CardHeader, Link, Divider } from "@heroui/react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,37 +15,47 @@ export default function LoginPage() {
     username: "",
     displayName: ""
   });
-  const [error, setError] = useState("");
+  const [registerError, setRegisterError] = useState(""); // Erro específico para registro
 
-  const { login, register } = useAuth();
+  const { currentUser, login, register, error, clearError } = useAuth();
   const navigate = useNavigate();
+
+  // Redirecionar automaticamente quando usuário estiver logado
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/");
+    }
+  }, [currentUser, navigate]);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleInputChange = (field: string, value: string) => {
     const newValue = value.replace(/ /g, "-");
     setFormData(prev => ({ ...prev, [field]: newValue }));
-    setError(""); // Limpar erro ao digitar
+    clearError(); // Limpar erro do contexto ao digitar
+    setRegisterError(""); // Limpar erro de registro
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    clearError();
+    setRegisterError("");
 
     try {
       if (isLogin) {
         await login(formData.email, formData.password);
+        // Redirecionamento será automático pelo useEffect
       } else {
         if (!formData.username || !formData.displayName) {
-          throw new Error("Por favor, preencha todos os campos");
+          setRegisterError("Por favor, preencha todos os campos");
+          return;
         }
         await register(formData.email, formData.password, formData.username, formData.displayName);
+        // Redirecionamento será automático pelo useEffect
       }
-      // Redirecionar será feito automaticamente pelo AuthContext
-      navigate("/");
     } catch (err: any) {
-      setError(err.message || "Erro ao processar solicitação");
+      setRegisterError(err.message || "Erro ao processar solicitação");
     } finally {
       setLoading(false);
     }
@@ -125,9 +135,9 @@ export default function LoginPage() {
                 type={isVisible ? "text" : "password"}
               />
 
-              {error && (
+              {(error || registerError) && (
                 <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded">
-                  {error}
+                  {error || registerError}
                 </div>
               )}
 
@@ -155,7 +165,8 @@ export default function LoginPage() {
                 color="secondary"
                 onPress={() => {
                   setIsLogin(!isLogin);
-                  setError("");
+                  clearError();
+                  setRegisterError("");
                   setFormData({ email: "", password: "", username: "", displayName: "" });
                 }}
               >

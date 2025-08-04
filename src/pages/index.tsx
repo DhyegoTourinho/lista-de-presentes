@@ -5,7 +5,7 @@ import DefaultLayout from "@/layouts/default";
 
 export default function IndexPage() {
   const { currentUser, userProfile } = useAuth();
-  window.location.reload();
+  
   return (
     <DefaultLayout>
     {currentUser && userProfile ? (
@@ -13,7 +13,7 @@ export default function IndexPage() {
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         
         <div className="inline-block max-w-4xl text-center justify-center">
-          <span className={title()}>{userProfile .displayName}'s&nbsp;</span>
+          <span className={title()}>{userProfile.displayName}'s&nbsp;</span>
           <span className={title({ color: "violet" })}>GIFTLAB&nbsp;</span>
           <br />
         </div> 
@@ -33,13 +33,13 @@ export default function IndexPage() {
                 Gerencie sua lista de presentes e compartilhe com seus amigos e familiares.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
                 <Button
                   as={Link}
                   href={`/admin/${userProfile.username}`}
                   color="secondary"
                   size="lg"
-                  className="bg-secondary-500/30 flex-1"
+                  className="bg-secondary-500/30 flex-1 py-3"
                 >
                     Gerenciar Minha Lista
                 </Button>
@@ -49,12 +49,24 @@ export default function IndexPage() {
                   href={`/gift/${userProfile.username}`}
                   variant="bordered"
                   size="lg"
-                  className="flex-1"
+                  className="flex-1 py-3"
                 >
                   Ver meu Perfil Público
                 </Button>
-              </div>
+                <div className="col-span-2 flex flex-col sm:flex-row gap-4 w-full">
 
+                  <Button
+                    as={Link}
+                    href="/listas"
+                    size="lg"
+                    variant="bordered"
+                    className="py-3 flex-1 bg-gradient-to-r from-black-500/30 to-secondary-500/30"
+                  >
+                    Ver Listas Públicas
+                  </Button>
+                </div>
+              </div>
+              
               <div className="mt-6 p-4 rounded-lg mt-16">
                 <p className="text-sm text-default-600">
                   <strong>Seu Link público:</strong>
@@ -151,12 +163,12 @@ export default function IndexPage() {
                 </Button>
                 <Button
                   as={Link}
-                  href="/gift/demo"
+                  href="/listas"
                   variant="bordered"
                   size="lg"
                   className="px-8 bg-black-500/30"
                 >
-                  Ver Listas
+                  Ver Listas Públicas
                 </Button>
               </div>
             </div>

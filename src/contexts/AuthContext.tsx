@@ -39,10 +39,12 @@ interface AuthContextType {
   currentUser: User | null;
   userProfile: UserProfile | null;
   loading: boolean;
+  error: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, username: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
   updateUserProfile: (profileData: Partial<UserProfile>) => Promise<void>;
+  clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -63,6 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showFirebaseWarning, setShowFirebaseWarning] = useState(false);
 
   useEffect(() => {
@@ -76,8 +79,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     if (!isFirebaseConfigured()) {
-      throw new Error("Firebase não está configurado");
+      setError("Firebase não está configurado");
+      return;
     }
+
+    setError(null); // Limpar erro anterior
+    setLoading(true);
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -87,6 +94,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       // Códigos que indicam credenciais inválidas
       const invalidCredentialCodes = new Set([
+        AuthErrorCodes.INVALID_EMAIL, // email mal formatado
+        AuthErrorCodes.USER_DELETED, // usuário não existe  
+        AuthErrorCodes.INVALID_PASSWORD, // senha errada
         'auth/wrong-password', // senha incorreta (código antigo)
         'auth/user-not-found', // usuário não encontrado
         'auth/invalid-credential', // credencial inválida (novo código Firebase v9+)
@@ -95,13 +105,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (invalidCredentialCodes.has(error.code)) {
         // Mensagem genérica para não vazar qual dos dois está errado
-        throw new Error(
-          "Credenciais inválidas, por favor, verifique seus dados e tente novamente."
-        );
+        setError("Credenciais inválidas, por favor, verifique seus dados e tente novamente.");
+      } else if (error.code === 'auth/too-many-requests') {
+        setError("Muitas tentativas de login. Tente novamente em alguns minutos.");
+      } else {
+        // Para outros tipos de erro, usar mensagem genérica
+        setError("Erro ao fazer login. Tente novamente.");
       }
-      
-      // Para outros tipos de erro, relançar o erro original
-      throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -185,14 +197,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return unsubscribe;
   }, []);
 
+  const clearError = () => {
+    setError(null);
+  };
+
   const value = {
     currentUser,
     userProfile,
     loading,
+    error,
     login,
     register,
     logout,
-    updateUserProfile
+    updateUserProfile,
+    clearError
   };
 
   if (showFirebaseWarning) {
