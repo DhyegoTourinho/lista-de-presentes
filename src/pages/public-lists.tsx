@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Avatar, Button, Chip } from "@heroui/react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import { UserProfile } from "@/types";
 import DefaultLayout from "@/layouts/default";
 import { title } from "@/components/primitives";
 import { Link } from "react-router-dom";
+import { RateLimiter, QueryCache } from "@/utils/rateLimiting";
 
 export default function PublicListsPage() {
   const [publicLists, setPublicLists] = useState<UserProfile[]>([]);
@@ -15,10 +16,38 @@ export default function PublicListsPage() {
   useEffect(() => {
     const loadPublicLists = async () => {
       try {
-        // Buscar todos os usuários públicos
-        const usersRef = collection(db, 'users');
-        const usersSnapshot = await getDocs(usersRef);
+        // Rate limiting - máximo 5 requisições por hora
+        if (!RateLimiter.canMakeRequest('load_public_lists', 5, 3600000)) {
+          setError('Muitas requisições. Tente novamente em 1 hora.');
+          setLoading(false);
+          return;
+        }
+
+        // Verificar cache primeiro
+        const cacheKey = 'public_lists';
+        let data = QueryCache.get(cacheKey);
         
+        if (data) {
+          setPublicLists(data);
+          setLoading(false);
+          return;
+        }
+
+        // Buscar usuários com limite para controlar custos
+        const usersRef = collection(db, 'users');
+        const q = query(
+          usersRef, 
+          orderBy('createdAt', 'desc'),
+          limit(20) // Limitar a 20 usuários para reduzir custos
+        );
+        const usersSnapshot = await getDocs(q);
+        
+        if (usersSnapshot.size === 0) {
+          setPublicLists([]);
+          setLoading(false);
+          return;
+        }
+
         const usersList = usersSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
@@ -27,10 +56,13 @@ export default function PublicListsPage() {
         // Filtrar apenas usuários que têm username (listas públicas)
         const publicUsersList = usersList.filter(user => user.username);
         
+        // Cache por 10 minutos para reduzir consultas
+        QueryCache.set(cacheKey, publicUsersList, 600000);
+        
         setPublicLists(publicUsersList);
       } catch (err) {
         console.error("Erro ao carregar listas públicas:", err);
-        setError("Erro ao carregar listas públicas");
+        setError("Erro ao carregar listas públicas. Tente novamente mais tarde.");
       } finally {
         setLoading(false);
       }
