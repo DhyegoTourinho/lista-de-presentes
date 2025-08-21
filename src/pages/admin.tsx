@@ -199,7 +199,7 @@ export default function AdminPage() {
                   className="flex-1"
                 />
                 <div className="text-sm text-default-500 flex items-center">
-                  <span>URL pública: /gift/{username}</span>
+                  <span>URL pública: #/gift/{username}</span>
                 </div>
               </div>
               

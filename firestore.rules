@@ -24,7 +24,7 @@ service cloud.firestore {
     // Usuários podem ler e escrever apenas seus próprios dados
     match /users/{userId} {
       allow read: if true; // Perfis são públicos para leitura
-      allow write: if isOwner(userId) && isValidSize();
+      allow write: if isOwner(userId) && isValidSize() && isValidUserData();
       
       // Subcoleção de presentes - limitada
       match /gifts/{giftId} {
@@ -41,13 +41,21 @@ service cloud.firestore {
       }
     }
     
+    // Validar dados do usuário
+    function isValidUserData() {
+      return request.resource.data.email.size() <= 250 &&
+             request.resource.data.displayName.size() <= 100 &&
+             request.resource.data.username.size() >= 3 &&
+             request.resource.data.username.size() <= 75;
+    }
+    
     // Usernames são públicos para leitura, mas controlados para escrita
     match /usernames/{username} {
       allow read: if true;
       allow write: if isAuthenticated() && 
         (resource == null || request.auth.uid == resource.data.uid) &&
-        username.size() >= 3 && username.size() <= 30 &&
-        username.matches('[a-zA-Z0-9_-]+');
+        username.size() >= 3 && username.size() <= 75 &&
+        username.matches('^[a-z0-9_-]+$');
     }
     
     // Rate limiting collection (para tracking)
