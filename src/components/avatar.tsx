@@ -88,14 +88,14 @@ export default function App() {
               onPress={() => navigate(`/admin/${userProfile?.username}`)}
               textValue="Gerenciar Lista"
             >
-              📝 Gerenciar Minha Lista
+              Gerenciar Minha Lista
             </DropdownItem>
             <DropdownItem 
               key="public" 
               onPress={() => navigate(`/gift/${userProfile?.username}`)}
               textValue="Ver Perfil Público"
             >
-              👁️ Ver Perfil Público
+              Ver Perfil Público
             </DropdownItem>
             <DropdownItem 
               key="logout" 
@@ -104,7 +104,7 @@ export default function App() {
               className="text-danger"
               textValue="Sair"
             >
-              🚪 Sair
+              Sair
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

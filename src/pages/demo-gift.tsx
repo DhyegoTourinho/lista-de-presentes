@@ -61,10 +61,10 @@ export default function DemoGiftPage() {
           <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
             <CardBody className="text-center">
               <h2 className="text-xl font-semibold text-purple-800 mb-2">
-                🎯 Página de Demonstração
+                Página de Demonstração
               </h2>
               <p className="text-purple-700 mb-4">
-                Esta é uma prévia de como sua lista de presentes aparecerá. Configure o Firebase para criar sua própria lista personalizada!
+                Esta é uma prévia de como sua lista de presentes aparecerá. Configure seus presentes para criar sua própria lista personalizada!
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button
@@ -151,7 +151,7 @@ export default function DemoGiftPage() {
         <div className="text-center text-sm text-default-400 max-w-md">
           <Divider className="mb-4" />
           <p>
-            Esta é uma demonstração do sistema. Com o Firebase configurado, você poderá:
+            Esta é uma demonstração do sistema. Com o banco de dados configurado, você poderá:
           </p>
           <ul className="text-left mt-2 space-y-1">
             <li>• Criar sua conta personalizada</li>

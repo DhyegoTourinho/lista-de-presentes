@@ -249,7 +249,6 @@ export default function GiftPage() {
         {/* Footer com informações */}
         <div className="text-center text-sm text-default-400 max-w-md">
           <p>
-            Esta é uma lista de presentes pública. 
             {!userProfile.gifts?.some(g => g.isPurchased) && userProfile.gifts?.length > 0 && (
               " Clique nos itens para ver onde comprar."
             )}

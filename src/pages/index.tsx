@@ -73,7 +73,7 @@ export default function IndexPage() {
                   <strong>Seu Link público:</strong>
                   <br />
                   <code className="text-secondary">
-                    {window.location.origin}/gift/{userProfile.username}
+                    {window.location.origin}/#/gift/{userProfile.username}
                   </code>
                 </p>
                 <p className="text-xs text-default-500 mt-2">
