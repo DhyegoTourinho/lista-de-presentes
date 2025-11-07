@@ -1,6 +1,6 @@
 import { Button } from "@heroui/button";
 import { Kbd } from "@heroui/kbd";
-import { Link } from "@heroui/link";
+import { Link as HeroUILink } from "@heroui/link";
 import { Input } from "@heroui/input";
 import {
   Navbar as HeroUINavbar,
@@ -20,7 +20,7 @@ import {
 } from "@heroui/react";
 import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -71,28 +71,26 @@ export const Navbar = () => {
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
-          <Link
-            className="flex justify-start items-center gap-1"
-            color="foreground"
-            href="/"
+          <RouterLink
+            className="flex justify-start items-center gap-1 text-foreground"
+            to="/"
           >
             <Logo />
             <p className="font-bold text-inherit">Lista de Presentes</p>
-          </Link>
+          </RouterLink>
         </NavbarBrand>
         <div className="hidden lg:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
-              <Link
+              <RouterLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
                   "data-[active=true]:text-secondary data-[active=true]:font-medium",
                 )}
-                color="foreground"
-                href={item.href}
+                to={item.href}
               >
                 {item.label}
-              </Link>
+              </RouterLink>
             </NavbarItem>
           ))}
         </div>
@@ -103,15 +101,15 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal href={siteConfig.links.twitter} title="Twitter">
+          <HeroUILink isExternal href={siteConfig.links.twitter} title="Twitter">
             <TwitterIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.discord} title="Discord">
+          </HeroUILink>
+          <HeroUILink isExternal href={siteConfig.links.discord} title="Discord">
             <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.github} title="GitHub">
+          </HeroUILink>
+          <HeroUILink isExternal href={siteConfig.links.github} title="GitHub">
             <GithubIcon className="text-default-500" />
-          </Link>
+          </HeroUILink>
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
@@ -155,9 +153,9 @@ export const Navbar = () => {
         ) : (
           <NavbarItem>
             <Button
-              as={Link}
+              as={RouterLink}
               color="secondary"
-              href="/login"
+              to="/login"
               variant="flat"
             >
               Entrar
@@ -167,9 +165,9 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal href={siteConfig.links.github}>
+        <HeroUILink isExternal href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
-        </Link>
+        </HeroUILink>
         <ThemeSwitch />
         {currentUser && userProfile ? (
           <Dropdown placement="bottom-end">
@@ -206,9 +204,9 @@ export const Navbar = () => {
           </Dropdown>
         ) : (
           <Button
-            as={Link}
+            as={RouterLink}
             color="secondary"
-            href="/login"
+            to="/login"
             size="sm"
           >
             Entrar
@@ -222,40 +220,37 @@ export const Navbar = () => {
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
+              <RouterLink
+                className={`text-${
                   index === 2
                     ? "secondary"
                     : index === siteConfig.navMenuItems.length - 1
                       ? "danger"
                       : "foreground"
-                }
-                href="#"
-                size="lg"
+                } text-lg`}
+                to={item.href}
               >
                 {item.label}
-              </Link>
+              </RouterLink>
             </NavbarMenuItem>
           ))}
           {currentUser && userProfile && (
             <>
               <NavbarMenuItem>
-                <Link
-                  color="foreground"
-                  href={`/admin/${userProfile.username}`}
-                  size="lg"
+                <RouterLink
+                  className="text-foreground text-lg"
+                  to={`/admin/${userProfile.username}`}
                 >
                   Painel Admin
-                </Link>
+                </RouterLink>
               </NavbarMenuItem>
               <NavbarMenuItem>
-                <Link
-                  color="danger"
-                  onPress={handleLogout}
-                  size="lg"
+                <button
+                  className="text-danger text-lg text-left"
+                  onClick={handleLogout}
                 >
                   Sair
-                </Link>
+                </button>
               </NavbarMenuItem>
             </>
           )}

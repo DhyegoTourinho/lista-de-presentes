@@ -1,4 +1,5 @@
-import { Link, Button, Card, CardBody, CardHeader } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader } from "@heroui/react";
+import { Link } from "react-router-dom";
 import { title, subtitle } from "@/components/primitives";
 import { useAuth } from "@/contexts/AuthContext";
 import DefaultLayout from "@/layouts/default";
@@ -36,7 +37,7 @@ export default function IndexPage() {
               <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
                 <Button
                   as={Link}
-                  href={`/admin/${userProfile.username}`}
+                  to={`/admin/${userProfile.username}`}
                   color="secondary"
                   size="lg"
                   className="bg-secondary-500/30 flex-1 py-3"
@@ -46,7 +47,7 @@ export default function IndexPage() {
                 
                 <Button
                   as={Link}
-                  href={`/gift/${userProfile.username}`}
+                  to={`/gift/${userProfile.username}`}
                   variant="bordered"
                   size="lg"
                   className="flex-1 py-3"
@@ -57,7 +58,7 @@ export default function IndexPage() {
 
                   <Button
                     as={Link}
-                    href="/listas"
+                    to="/listas"
                     size="lg"
                     variant="bordered"
                     className="py-3 flex-1 bg-gradient-to-r from-black-500/30 to-secondary-500/30"
@@ -154,7 +155,7 @@ export default function IndexPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   as={Link}
-                  href="/login"
+                  to="/login"
                   color="secondary"
                   size="lg"
                   className="bg-secondary-500/30 px-8"
@@ -163,7 +164,7 @@ export default function IndexPage() {
                 </Button>
                 <Button
                   as={Link}
-                  href="/listas"
+                  to="/listas"
                   variant="bordered"
                   size="lg"
                   className="px-8 bg-black-500/30"
