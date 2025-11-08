@@ -179,52 +179,63 @@ export default function GiftPage() {
                   <p>Nenhum presente na lista ainda.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 pb-8">
                   {gifts.map((gift) => (
-                  <CometCard rotateDepth = {17.5}
-                    translateDepth = {20}
-                    className = "max-w-[280px] mx-auto"
+                  <CometCard 
+                    key={gift.id}
+                    rotateDepth={17.5}
+                    translateDepth={20}
+                    className="w-full"
                   >
-                    <Card key={gift.id} className="max-w-[280px]">
-                      <CardBody className="p-4">
+                    <Card className="w-full h-full min-h-[420px] max-h-[420px] flex flex-col">
+                      <CardBody className="p-3 sm:p-4 flex flex-col h-full">
+                        {/* Container de imagem com aspect ratio fixo */}
                         {gift.imageUrl && (
-                          <Image
-                          src={gift.imageUrl}
-                          alt={gift.name}
-                          className="w-full h-40 object-cover rounded-lg mb-3"
-                          fallbackSrc="/api/placeholder/280/160"
-                          />
+                          <div className="relative w-full aspect-[4/3] mb-3 overflow-hidden rounded-lg bg-default-100 flex-shrink-0">
+                            <Image
+                              src={gift.imageUrl}
+                              alt={gift.name}
+                              className="absolute inset-0 w-full h-full object-cover"
+                              classNames={{
+                                wrapper: "!max-w-full w-full h-full",
+                                img: "w-full h-full object-cover"
+                              }}
+                              fallbackSrc="/api/placeholder/280/160"
+                            />
+                          </div>
                         )}
-                        
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-start">
-                            <h3 className="font-semibold text-lg leading-tight">{gift.name}</h3>
+
+                        <div className="space-y-2 flex-1 flex flex-col">
+                          <div className="flex justify-between items-start gap-2">
+                            <h3 className="font-semibold text-base sm:text-lg leading-tight flex-1 line-clamp-2">
+                              {gift.name}
+                            </h3>
                             {gift.isPurchased && (
-                              <Chip color="success" size="sm" variant="flat">
+                              <Chip color="success" size="sm" variant="flat" className="flex-shrink-0">
                                 Comprado
                               </Chip>
                             )}
                           </div>
                           
                           {gift.description && (
-                            <p className="text-sm text-default-500 line-clamp-2">
+                            <p className="text-xs sm:text-sm text-default-500 line-clamp-2 flex-shrink-0">
                               {gift.description}
                             </p>
                           )}
                           
-                          <div className="flex justify-between items-center pt-2">
-                            <span className="text-xl font-bold text-primary">
+                          <div className="flex justify-between items-center pt-2 mt-auto">
+                            <span className="text-lg sm:text-xl font-bold text-primary">
                               R$ {gift.price.toFixed(2)}
                             </span>
                           </div>
                           
                           {gift.link && !gift.isPurchased && (
                             <Button
-                            color="secondary"
-                            variant="flat"
-                            size="sm"
-                            className="w-full mt-3"
-                            onPress={() => handlePurchaseClick(gift)}
+                              color="secondary"
+                              variant="flat"
+                              size="sm"
+                              className="w-full mt-3"
+                              onPress={() => handlePurchaseClick(gift)}
                             >
                               Ver/Comprar
                             </Button>

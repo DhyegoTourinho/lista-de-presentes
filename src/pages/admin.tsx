@@ -235,45 +235,58 @@ export default function AdminPage() {
                   <p>Clique em "Adicionar Presente" para começar!</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {gifts.map((gift) => (
-                    <Card key={gift.id} className="max-w-[300px]">
-                      <CardBody className="p-4">
+                    <Card key={gift.id} className="w-full min-h-[420px] max-h-[420px] flex flex-col">
+                      <CardBody className="p-3 sm:p-4 flex flex-col h-full">
+                        {/* Container de imagem com aspect ratio fixo */}
                         {gift.imageUrl && (
-                          <Image
-                            src={gift.imageUrl}
-                            alt={gift.name}
-                            className="w-full h-32 object-cover rounded-lg mb-2"
-                          />
+                          <div className="relative w-full aspect-[4/3] mb-3 overflow-hidden rounded-lg bg-default-100 flex-shrink-0">
+                            <Image
+                              src={gift.imageUrl}
+                              alt={gift.name}
+                              className="absolute inset-0 w-full h-full object-cover"
+                              classNames={{
+                                wrapper: "!max-w-full w-full h-full",
+                                img: "w-full h-full object-cover"
+                              }}
+                            />
+                          </div>
                         )}
-                        <h3 className="font-semibold text-lg">{gift.name}</h3>
-                        {gift.description && (
-                          <p className="text-sm text-default-500 mb-2">{gift.description}</p>
-                        )}
-                        <p className="text-lg font-bold text-primary mb-2">
-                          R$ {gift.price.toFixed(2)}
-                        </p>
-                        {gift.link && (
-                          <p className="text-sm text-default-500 mb-2 truncate">
-                            Link: {gift.link}
+                        <div className="flex-1 flex flex-col">
+                          <h3 className="font-semibold text-base sm:text-lg line-clamp-2">{gift.name}</h3>
+                          {gift.description && (
+                            <p className="text-xs sm:text-sm text-default-500 mb-2 line-clamp-2 flex-shrink-0">
+                              {gift.description}
+                            </p>
+                          )}
+                          <p className="text-lg sm:text-xl font-bold text-primary mb-2">
+                            R$ {gift.price.toFixed(2)}
                           </p>
-                        )}
-                        <div className="flex gap-2 mt-4">
-                          <Button 
-                            size="sm" 
-                            variant="flat"
-                            onPress={() => handleEditGift(gift)}
-                          >
-                            Editar
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            color="danger" 
-                            variant="flat"
-                            onPress={() => handleDeleteGift(gift.id)}
-                          >
-                            Excluir
-                          </Button>
+                          {gift.link && (
+                            <p className="text-xs sm:text-sm text-default-500 mb-2 truncate">
+                              Link: {gift.link}
+                            </p>
+                          )}
+                          <div className="flex gap-2 mt-auto">
+                            <Button 
+                              size="sm" 
+                              variant="flat"
+                              onPress={() => handleEditGift(gift)}
+                              className="flex-1"
+                            >
+                              Editar
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              color="danger" 
+                              variant="flat"
+                              onPress={() => handleDeleteGift(gift.id)}
+                              className="flex-1"
+                            >
+                              Excluir
+                            </Button>
+                          </div>
                         </div>
                       </CardBody>
                     </Card>
